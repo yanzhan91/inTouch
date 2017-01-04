@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:layout_centerInParent="true"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="#000000">
+
+    <ImageView
+        android:id="@+id/img"
+        android:layout_width="300dp"
+        android:layout_height="135dp"
+        android:layout_marginBottom="20dp"
+        android:layout_gravity="center"
+        android:background="@drawable/home_image_blue"
+        />
+
+    <Button
+        android:id="@+id/changeInfo"
+        android:layout_width="250dp"
+        android:layout_height="60dp"
+        android:text="My Contact Info"
+        android:textSize="22dp"
+        android:textColor="#ffffff"
+        android:layout_gravity="center"
+        android:drawableStart="@drawable/ic_person_black_40dp"
+        android:background="@drawable/home_button_background"
+        android:layout_marginBottom="10dp"
+        android:paddingLeft="15dp"
+        android:drawablePadding="-10dp"
+    />
+
+    <Button
+        android:id="@+id/nfcSettings"
+        android:layout_width="250dp"
+        android:layout_height="60dp"
+        android:text="NFC Settings"
+        android:textSize="22sp"
+        android:textColor="#ffffff"
+        android:layout_gravity="center"
+        android:background="@drawable/home_button_background"
+        android:layout_marginBottom="10dp"
+        android:drawableStart="@drawable/ic_settings_black_40dp"
+        android:paddingLeft="15dp"
+        android:drawablePadding="-15dp"
+        />
+
+    <Button
+        android:id="@+id/sendInfo"
+        android:layout_width="250dp"
+        android:layout_height="60dp"
+        android:text="Send"
+        android:textSize="22sp"
+        android:textColor="#ffffff"
+        android:layout_gravity="center"
+        android:background="@drawable/home_button_background"
+        android:layout_marginBottom="10dp"
+        android:drawableStart="@drawable/ic_file_upload_black_40dp"
+        android:paddingLeft="15dp"
+        android:drawablePadding="-25dp"
+        />
+
+    <Button
+        android:id="@+id/receiveInfo"
+        android:layout_width="250dp"
+        android:layout_height="60dp"
+        android:text="Receive"
+        android:textSize="22sp"
+        android:textColor="#ffffff"
+        android:layout_gravity="center"
+        android:background="@drawable/home_button_background"
+        android:layout_marginBottom="10dp"
+        android:drawableStart="@drawable/ic_file_download_black_40dp"
+        android:paddingLeft="15dp"
+        android:drawablePadding="-25dp"
+        />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="NFC is turned "
+            android:textSize="25sp"
+            android:textColor="#ffffff"
+            />
+
+        <TextView
+            android:id="@+id/nfcStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="30sp"
+            android:background="@color/black"
+            />
+
+        </LinearLayout>
+</LinearLayout>

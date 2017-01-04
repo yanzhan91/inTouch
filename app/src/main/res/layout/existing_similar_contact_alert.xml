@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableRow xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="50dp"
+    >
+    <LinearLayout
+        android:layout_height="50dp"
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:background="@color/white"
+        android:layout_weight="1"
+        >
+        <ImageView
+            android:id="@+id/similar_contacts_image"
+            android:layout_width="41dp"
+            android:layout_height="41dp"
+            android:background="@drawable/default_contact_image"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="4dp"
+            />
+        <TextView
+            android:id="@+id/similar_contacts_infomation"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginLeft="20dp"
+            android:textSize="14dp"
+            android:text="DispName\nInformation"
+            android:gravity="center_vertical"
+            />
+    </LinearLayout>
+</TableRow>
