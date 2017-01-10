@@ -3,6 +3,8 @@ package com.yzdevelopment.inTouch;
 import android.graphics.Bitmap;
 
 public class Contact {
+
+    private String contactID = null;
     private String display_name = null;
     private String home_phone = null;
     private String work_phone = null;
@@ -28,6 +30,13 @@ public class Contact {
         this.imageUri = imageUri;
     }
 
+    public String getContactID() {
+        return contactID;
+    }
+
+    public void setContactID(String contactID) {
+        this.contactID = contactID;
+    }
     public String getImageUri() {
         return imageUri;
     }

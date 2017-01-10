@@ -5,28 +5,17 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Calendar;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.Point;
 import android.nfc.NfcAdapter;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.Display;
-import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ListView;
-import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.provider.Settings;
 import android.os.Build;
@@ -77,7 +66,7 @@ public class HomePage extends Activity {
 				if (mNfcAdapter == null) {
 					showAlert("Error", "No NFC adapter found on device");
 				} else {
-					startActivity(new Intent(HomePage.this, ChangeInfo.class));
+					startActivity(new Intent(HomePage.this, ProfileInfo.class));
 				}
 			}
 		});

@@ -21,16 +21,6 @@ public class UserInfoDAO {
         dbHelper = new MySQLiteHelper(context);
     }
 
-    public Cursor getAllFieldsForSelection() {
-        database = dbHelper.getReadableDatabase();
-        List<Field> fields = new ArrayList<>();
-        final String[] COLUMNS = {"field_name", "selected"};
-        Cursor cursor = database.query(TABLE_NAME, COLUMNS, null, null, null, null, null);
-        cursor.moveToFirst();
-        database.close();
-        return cursor;
-    }
-
     public List<Field> getAllSelectedFields() {
         database = dbHelper.getReadableDatabase();
         List<Field> fields = new ArrayList<>();
@@ -45,33 +35,5 @@ public class UserInfoDAO {
         cursor.close();
         database.close();
         return fields;
-    }
-
-    public boolean updateVisibleFields(Map<String, Boolean> changes) {
-        database = dbHelper.getWritableDatabase();
-
-        for (String key : changes.keySet()) {
-            boolean selected = changes.get(key);
-            ContentValues visibleValues = new ContentValues();
-            visibleValues.put("selected", selected);
-            if (selected) {
-                visibleValues.put("field_value", "");
-            }
-            database.update(TABLE_NAME, visibleValues, "field_name = " + key, null);
-        }
-
-        database.close();
-        return true;
-    }
-
-    public boolean updateFieldValues(Map<String, String> fields) {
-        database = dbHelper.getWritableDatabase();
-        for (String fieldName : fields.keySet()) {
-            ContentValues values = new ContentValues();
-            values.put("field_value", fields.get(fieldName));
-            database.update(TABLE_NAME, values, "field_name=" + fieldName, null);
-        }
-        database.close();
-        return true;
     }
 }

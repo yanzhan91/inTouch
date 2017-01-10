@@ -15,6 +15,8 @@
     <color name="buttonTextColor">@color/white</color>
 	<color name="infoTextView">#0066FF</color>
 
+	<color name="brandPrimaryColor">#0066FF</color>
+
     <string name="beam_directions">
         1. Hold devices against each \u00A0\u00A0\u00A0\u00A0other
         \n\n2. When prompted, touch \u00A0\u00A0\u00A0\u00A0screen and hold
