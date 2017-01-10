@@ -9,6 +9,7 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.nfc.NfcAdapter;
 import android.os.Bundle;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
@@ -63,6 +64,7 @@ public class ProfileInfo extends ActionBarActivity {
             iv.setImageURI(Uri.parse(contact.getImageUri()));
         } else {
             iv.setImageURI(null);
+            iv.setImageResource(R.drawable.web_hi_res_512_blue);
         }
     }
 
@@ -252,6 +254,9 @@ public class ProfileInfo extends ActionBarActivity {
             case R.id.profile_edit_button:
                 editProfile();
                 break;
+            case android.R.id.home:
+                NavUtils.navigateUpFromSameTask(this);
+                return true;
             default:
                 break;
         }

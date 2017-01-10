@@ -26,7 +26,7 @@
         android:textSize="22dp"
         android:textColor="#ffffff"
         android:layout_gravity="center"
-        android:drawableStart="@drawable/ic_person_black_40dp"
+        android:drawableStart="@mipmap/ic_person_white"
         android:background="@drawable/home_button_background"
         android:layout_marginBottom="10dp"
         android:paddingLeft="15dp"
@@ -43,7 +43,7 @@
         android:layout_gravity="center"
         android:background="@drawable/home_button_background"
         android:layout_marginBottom="10dp"
-        android:drawableStart="@drawable/ic_settings_black_40dp"
+        android:drawableStart="@mipmap/ic_settings_white"
         android:paddingLeft="15dp"
         android:drawablePadding="-15dp"
         />
@@ -58,7 +58,7 @@
         android:layout_gravity="center"
         android:background="@drawable/home_button_background"
         android:layout_marginBottom="10dp"
-        android:drawableStart="@drawable/ic_file_upload_black_40dp"
+        android:drawableStart="@mipmap/ic_send_white"
         android:paddingLeft="15dp"
         android:drawablePadding="-25dp"
         />
@@ -73,7 +73,7 @@
         android:layout_gravity="center"
         android:background="@drawable/home_button_background"
         android:layout_marginBottom="10dp"
-        android:drawableStart="@drawable/ic_file_download_black_40dp"
+        android:drawableStart="@mipmap/ic_receive_white"
         android:paddingLeft="15dp"
         android:drawablePadding="-25dp"
         />
@@ -89,6 +89,7 @@
             android:layout_height="wrap_content"
             android:text="NFC is turned "
             android:textSize="25sp"
+            android:textColor="@color/brandPrimaryColor"
             />
 
         <TextView
