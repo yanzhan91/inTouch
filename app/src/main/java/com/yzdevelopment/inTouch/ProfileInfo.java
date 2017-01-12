@@ -1,5 +1,6 @@
 package com.yzdevelopment.inTouch;
 
+import android.app.Activity;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.database.Cursor;
@@ -30,6 +31,7 @@ import java.util.List;
 public class ProfileInfo extends ActionBarActivity {
 
     public static final String NOT_SET = "Not Set";
+    private List<CheckboxInfo> checkboxList;
 
     @Override
     public void onCreate(Bundle savedState) {
@@ -50,8 +52,7 @@ public class ProfileInfo extends ActionBarActivity {
     }
 
     private void displayProfile() {
-        Contact contact = new Contact();
-        retrieveProfile(contact);
+        Contact contact = ProfileAccessObject.getProfile(getApplicationContext());
         setupImage(contact);
         setupCheckboxList(contact);
     }
@@ -74,7 +75,7 @@ public class ProfileInfo extends ActionBarActivity {
     }
 
     private List<CheckboxInfo> createCheckList(Contact contact) {
-        List<CheckboxInfo> checkboxList = new ArrayList<>();
+        checkboxList = new ArrayList<>();
 
         String displayName = contact.getDisplay_name() == null ? NOT_SET : contact.getDisplay_name();
         String mobilePhone = contact.getMobile_phone() == null ? NOT_SET : contact.getMobile_phone();
@@ -122,119 +123,6 @@ public class ProfileInfo extends ActionBarActivity {
         }
     }
 
-    private void retrieveProfile(Contact contact) {
-        retrieveNameImageFromProfile(contact);
-        retrievePhoneFromProfile(contact);
-        retrieveEmailFromProfile(contact);
-        retrieveOrganizationFromProfile(contact);
-    }
-
-    private void retrieveNameImageFromProfile(Contact contact) {
-        Cursor c = getApplication().getContentResolver().query(
-                Uri.withAppendedPath(
-                        ContactsContract.Profile.CONTENT_URI,
-                        ContactsContract.Contacts.Data.CONTENT_DIRECTORY),
-                new String[] {
-                        ContactsContract.Profile.DISPLAY_NAME,
-                        ContactsContract.Profile.PHOTO_THUMBNAIL_URI,
-                        ContactsContract.Profile._ID
-                },
-                ContactsContract.Contacts.Data.MIMETYPE + " = ?",
-                new String[]{ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE},
-                null);
-
-        if (c != null) {
-            if (c.moveToFirst()) {
-                contact.setDisplay_name(c.getString(c.getColumnIndex(ContactsContract.Profile.DISPLAY_NAME)));
-                Log.i("profile", "-- " + c.getString(c.getColumnIndex(ContactsContract.Profile.PHOTO_THUMBNAIL_URI)));
-                contact.setImageUri(c.getString(c.getColumnIndex(ContactsContract.Profile.PHOTO_THUMBNAIL_URI)));
-                contact.setContactID(c.getString(c.getColumnIndex(ContactsContract.Profile._ID)));
-            }
-            c.close();
-        }
-    }
-
-    private void retrievePhoneFromProfile(Contact contact) {
-        Cursor c = getApplication().getContentResolver().query(
-                Uri.withAppendedPath(
-                        ContactsContract.Profile.CONTENT_URI,
-                        ContactsContract.Contacts.Data.CONTENT_DIRECTORY),
-                new String[] {
-                        ContactsContract.CommonDataKinds.Phone.NUMBER,
-                        ContactsContract.CommonDataKinds.Phone.TYPE
-                },
-                ContactsContract.Contacts.Data.MIMETYPE + " = ?",
-                new String[]{ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE},
-                null);
-
-        if (c != null) {
-            while (c.moveToNext()) {
-                switch (c.getInt(c.getColumnIndex(ContactsContract.CommonDataKinds.Phone.TYPE))) {
-                    case ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE:
-                        contact.setMobile_phone(c.getString(c.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)));
-                        break;
-                    case ContactsContract.CommonDataKinds.Phone.TYPE_HOME:
-                        contact.setHome_phone(c.getString(c.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)));
-                        break;
-                    case ContactsContract.CommonDataKinds.Phone.TYPE_WORK:
-                        contact.setWork_phone(c.getString(c.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)));
-                        break;
-                    default:
-                        break;
-                }
-            }
-            c.close();
-        }
-    }
-
-    private void retrieveEmailFromProfile(Contact contact) {
-        Cursor c = getApplication().getContentResolver().query(
-                Uri.withAppendedPath(
-                        ContactsContract.Profile.CONTENT_URI,
-                        ContactsContract.Contacts.Data.CONTENT_DIRECTORY),
-                new String[] {
-                        ContactsContract.CommonDataKinds.Email.ADDRESS,
-                        ContactsContract.CommonDataKinds.Email.IS_PRIMARY
-                },
-                ContactsContract.Contacts.Data.MIMETYPE + " = ?",
-                new String[]{ContactsContract.CommonDataKinds.Email.CONTENT_ITEM_TYPE},
-                null);
-
-        if (c != null) {
-            while (c.moveToNext()) {
-                if (c.getInt(c.getColumnIndex(ContactsContract.CommonDataKinds.Email.IS_PRIMARY)) == 1) {
-                    contact.setEmail(c.getString(c.getColumnIndex(ContactsContract.CommonDataKinds.Email.ADDRESS)));
-                    break;
-                } else if (contact.getEmail() == null) {
-                    contact.setEmail(c.getString(c.getColumnIndex(ContactsContract.CommonDataKinds.Email.ADDRESS)));
-                }
-            }
-            c.close();
-        }
-    }
-
-    private void retrieveOrganizationFromProfile(Contact contact) {
-        Cursor c = getApplication().getContentResolver().query(
-                Uri.withAppendedPath(
-                        ContactsContract.Profile.CONTENT_URI,
-                        ContactsContract.Contacts.Data.CONTENT_DIRECTORY),
-                new String[] {
-                        ContactsContract.CommonDataKinds.Organization.COMPANY,
-                        ContactsContract.CommonDataKinds.Organization.TITLE
-                },
-                ContactsContract.Contacts.Data.MIMETYPE + " = ?",
-                new String[]{ContactsContract.CommonDataKinds.Organization.CONTENT_ITEM_TYPE},
-                null);
-
-        if (c != null) {
-            if (c.moveToFirst()) {
-                contact.setCompany(c.getString(c.getColumnIndex(ContactsContract.CommonDataKinds.Organization.COMPANY)));
-                contact.setJobTitle(c.getString(c.getColumnIndex(ContactsContract.CommonDataKinds.Organization.TITLE)));
-            }
-            c.close();
-        }
-    }
-
     public void editProfile() {
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setData(ContactsContract.Profile.CONTENT_URI);
@@ -255,7 +143,15 @@ public class ProfileInfo extends ActionBarActivity {
                 editProfile();
                 break;
             case android.R.id.home:
-                NavUtils.navigateUpFromSameTask(this);
+//                NavUtils.navigateUpFromSameTask(this);
+                Intent resultIntent = new Intent();
+                for (CheckboxInfo cb : checkboxList) {
+                    if (cb.isSelected() && !cb.getValue().equals(NOT_SET)) {
+                        resultIntent.putExtra(cb.getKey(), cb.getValue());
+                    }
+                }
+                setResult(Activity.RESULT_OK, resultIntent);
+                finish();
                 return true;
             default:
                 break;

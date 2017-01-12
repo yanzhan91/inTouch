@@ -31,6 +31,7 @@
         android:layout_marginBottom="10dp"
         android:paddingLeft="15dp"
         android:drawablePadding="-10dp"
+        android:onClick="viewProfile"
     />
 
     <Button
@@ -46,6 +47,7 @@
         android:drawableStart="@mipmap/ic_settings_white"
         android:paddingLeft="15dp"
         android:drawablePadding="-15dp"
+        android:onClick="changeNFC"
         />
 
     <Button
@@ -61,6 +63,7 @@
         android:drawableStart="@mipmap/ic_send_white"
         android:paddingLeft="15dp"
         android:drawablePadding="-25dp"
+        android:onClick="beamContact"
         />
 
     <Button
@@ -76,6 +79,7 @@
         android:drawableStart="@mipmap/ic_receive_white"
         android:paddingLeft="15dp"
         android:drawablePadding="-25dp"
+        android:onClick="receiveContact"
         />
 
     <LinearLayout

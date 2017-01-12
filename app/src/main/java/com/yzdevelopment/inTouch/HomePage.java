@@ -23,26 +23,18 @@ import android.os.Build;
 import android.app.PendingIntent;
 
 public class HomePage extends Activity {
-	
-	private static final String INFORMATION_RAW = "inTouch_information.raw";
-    private NfcAdapter mNfcAdapter = null;
+
+	private NfcAdapter mNfcAdapter = null;
     private TextView nfcStatus;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.home);
-
         new SimpleEula(this).show();
 
-		Button changeButton = (Button) findViewById(R.id.changeInfo);
-		Button sendButton = (Button) findViewById(R.id.sendInfo);
-		Button receiveButton = (Button) findViewById(R.id.receiveInfo);
-        Button nfcSettings = (Button) findViewById(R.id.nfcSettings);
-
         nfcStatus = (TextView) findViewById(R.id.nfcStatus);
-
-        mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
+		mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
 
         if (mNfcAdapter != null) {
             if (mNfcAdapter.isEnabled()) {
@@ -56,69 +48,6 @@ public class HomePage extends Activity {
             nfcStatus.setText("UNAVAILABLE");
             nfcStatus.setTextColor(Color.parseColor("red"));
         }
-
-//        test1();
-//        if (true) return;
-
-		changeButton.setOnClickListener(new OnClickListener(){
-			@Override
-			public void onClick(View arg0) {
-				if (mNfcAdapter == null) {
-					showAlert("Error", "No NFC adapter found on device");
-				} else {
-					startActivity(new Intent(HomePage.this, ProfileInfo.class));
-				}
-			}
-		});
-		
-		sendButton.setOnClickListener(new OnClickListener(){
-			@Override
-			public void onClick(View arg0) {
-				if (mNfcAdapter == null || !mNfcAdapter.isEnabled()) {
-                    showAlert("Error", "Please turn on NFC in NFC Settings");
-                } else if (!mNfcAdapter.isNdefPushEnabled()) {
-                    showAlert("Error", "Android Beam is disabled. Go to settings to turn it on.");
-				} else {
-					Intent intent = new Intent(HomePage.this, BeamData.class);
-					String s = retrieveInfo();
-					if (s != null) {
-						intent.putExtra("com.yzdevelopment.inTouch.beam_message", s);
-						startActivity(intent);
-					} else {
-                        // show alert indicating contact information not filled
-                        showAlert("Error","Information not filled.");
-                    }
-				}
-			}
-		});
-		
-		receiveButton.setOnClickListener(new OnClickListener(){
-			@Override
-			public void onClick(View arg0) {
-				if (mNfcAdapter == null || !mNfcAdapter.isEnabled()) {
-					showAlert("Error", "Please turn on NFC in NFC Settings");
-				} else {
-					startActivity(new Intent(HomePage.this, TagDispatch.class));	
-				}
-			}
-		});
-
-        nfcSettings.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mNfcAdapter == null) {
-                    showAlert("Error", "No NFC adapter found on device");
-                } else {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                        Intent intent = new Intent(Settings.ACTION_NFC_SETTINGS);
-                        startActivity(intent);
-                    } else {
-                        Intent intent = new Intent(Settings.ACTION_WIRELESS_SETTINGS);
-                        startActivity(intent);
-                    }
-                }
-            }
-        });
 	}
 	
 	public void showAlert(String title, String msg) {
@@ -127,52 +56,61 @@ public class HomePage extends Activity {
 				.setMessage(msg)
 				.setNeutralButton(android.R.string.yes,
 						new DialogInterface.OnClickListener() {
-							public void onClick(DialogInterface dialog,
-									int which) {
+							public void onClick(DialogInterface dialog, int which) {
 								// do nothing
 							}
 						})
                 .setIcon(android.R.drawable.ic_delete)
                 .show();
 	}
-	
-	 public String retrieveInfo() {
-	    	FileInputStream fis = null;
-	    	BufferedReader r = null;
-	    	String info = "";
-	    	try {
-	    		fis = openFileInput(INFORMATION_RAW);
-	    		r = new BufferedReader(new InputStreamReader(fis));
-	    		String line;
-	    		while ((line = r.readLine()) != null) {
-	    			info += (line+",");
-	    		}
-	    		return info.substring(0, info.length()-1);
-	    	} catch (FileNotFoundException e) {
-	    		//Log.i("Yan", "retrieving...file not found");
-	    		return null;
-	    	} catch (IOException e) {
-	    		//Log.i("Yan", "retrieving...io exception");
-	    	} finally {
-	    		if (fis != null) {
-	    			try {
-						fis.close();
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-	    		}
-	    		
-	    		if (r != null) {
-	    			try {
-						r.close();
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-	    		}
-	    	}
-	    	
-	    	return null;
-	 }
+
+	public void viewProfile(View v) {
+		if (mNfcAdapter == null) {
+			showAlert("Error", "No NFC adapter found on device");
+		} else {
+			startActivity(new Intent(HomePage.this, ProfileInfo.class));
+		}
+	}
+
+	public void changeNFC(View v) {
+		if (mNfcAdapter == null) {
+			showAlert("Error", "No NFC adapter found on device");
+		} else {
+			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+				Intent intent = new Intent(Settings.ACTION_NFC_SETTINGS);
+				startActivity(intent);
+			} else {
+				Intent intent = new Intent(Settings.ACTION_WIRELESS_SETTINGS);
+				startActivity(intent);
+			}
+		}
+	}
+
+	public void beamContact(View v) {
+		if (mNfcAdapter == null || !mNfcAdapter.isEnabled()) {
+			showAlert("Error", "Please turn on NFC in NFC Settings");
+		} else if (!mNfcAdapter.isNdefPushEnabled()) {
+			showAlert("Error", "Android Beam is disabled. Go to NFC settings to turn it on.");
+		} else {
+			Intent intent = new Intent(HomePage.this, BeamData.class);
+			String s = "";//retrieveInfo();
+			if (s != null) {
+				intent.putExtra("com.yzdevelopment.inTouch.beam_message", s);
+				startActivity(intent);
+			} else {
+				// show alert indicating contact information not filled
+				showAlert("Error","Information not filled.");
+			}
+		}
+	}
+
+	public void receiveContact(View v) {
+		if (mNfcAdapter == null || !mNfcAdapter.isEnabled()) {
+			showAlert("Error", "Please turn on NFC in NFC Settings");
+		} else {
+			startActivity(new Intent(HomePage.this, TagDispatch.class));
+		}
+	}
 
      @Override
      public void onResume() {

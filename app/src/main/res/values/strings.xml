@@ -20,7 +20,7 @@
     <string name="beam_directions">
         1. Hold devices against each \u00A0\u00A0\u00A0\u00A0other
         \n\n2. When prompted, touch \u00A0\u00A0\u00A0\u00A0screen and hold
-        \n\n3. Wait for confirmation alert
+        \n\n3. Wait for vibration
     </string>
     <string name="eula">
         Copyright &#169; 2015 %3$s. All Rights Reserved.
