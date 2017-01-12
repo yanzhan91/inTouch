@@ -22,6 +22,10 @@ import android.os.Build;
 
 import android.app.PendingIntent;
 
+import com.google.gson.Gson;
+
+import org.json.JSONObject;
+
 public class HomePage extends Activity {
 
 	private NfcAdapter mNfcAdapter = null;
@@ -93,9 +97,11 @@ public class HomePage extends Activity {
 			showAlert("Error", "Android Beam is disabled. Go to NFC settings to turn it on.");
 		} else {
 			Intent intent = new Intent(HomePage.this, BeamData.class);
-			String s = "";//retrieveInfo();
-			if (s != null) {
-				intent.putExtra("com.yzdevelopment.inTouch.beam_message", s);
+			Contact contact = ProfileAccessObject.getProfile(getApplicationContext());
+            String json = getJSONStringFromContact(contact);
+			if (json != null) {
+                intent.putExtra("com.yzdevelopment.inTouch.beam_imageUri", contact.getImageUri());
+				intent.putExtra("com.yzdevelopment.inTouch.beam_contact", json);
 				startActivity(intent);
 			} else {
 				// show alert indicating contact information not filled
@@ -103,6 +109,11 @@ public class HomePage extends Activity {
 			}
 		}
 	}
+
+    private String getJSONStringFromContact(Contact contact) {
+        Gson gson = new Gson();
+        return gson.toJson(contact);
+    }
 
 	public void receiveContact(View v) {
 		if (mNfcAdapter == null || !mNfcAdapter.isEnabled()) {

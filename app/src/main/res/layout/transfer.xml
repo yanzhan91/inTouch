@@ -3,7 +3,7 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical"
-    android:background="@color/brandPrimaryColor"
+    android:background="@color/white"
     >
 
     <TextView
@@ -15,7 +15,6 @@
         android:layout_marginTop="30dp"
         android:textSize="26sp"
         android:text="Placeholder"
-        android:textColor="@color/white"
         />
 
     <TextView
@@ -26,7 +25,6 @@
         android:layout_marginTop="30dp"
         android:textSize="18sp"
         android:text="@string/beam_directions"
-        android:textColor="@color/white"
         />
 
     <ImageView
@@ -36,7 +34,8 @@
         android:layout_marginTop="30dp"
         android:clickable="false"
         android:longClickable="false"
-        android:background="@drawable/beamimagefour"
+        android:src="@drawable/beamimagefour"
+        android:id="@+id/transferImage"
         />
 
 </LinearLayout>

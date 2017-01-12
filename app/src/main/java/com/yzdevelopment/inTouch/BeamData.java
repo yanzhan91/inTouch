@@ -1,7 +1,7 @@
 package com.yzdevelopment.inTouch;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.nio.charset.Charset;
 import java.util.Locale;
@@ -10,66 +10,97 @@ import android.app.PendingIntent;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.nfc.NdefMessage;
 import android.nfc.NdefRecord;
 import android.nfc.NfcAdapter;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 public class BeamData extends ActionBarActivity {
 
-	private NfcAdapter mNfcAdapter;
-	private NdefMessage mNdefMessage;
-	private static final String IMAGE_PNG = "inTouch_image.png";
+	private NfcAdapter mNfcAdapter = null;
+	private NdefMessage mNdefMessage = null;
 
 	@Override
 	public void onCreate(Bundle savedState) {
 		super.onCreate(savedState);
 
 		setContentView(R.layout.transfer);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
+		ActionBar actionBar = getSupportActionBar();
+		actionBar.show();
+		actionBar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.brandPrimaryColor)));
+		actionBar.setDisplayShowTitleEnabled(false);
 
         TextView mTextView = (TextView)findViewById(R.id.tv);
 
-        mTextView.setText("Sending...");
+        mTextView.setText("Ready to send");
 
 		mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
 
 		Intent intent = getIntent();
-		String message = intent.getStringExtra("com.yzdevelopment.inTouch.beam_message");
-		
-		Bitmap bmp;
-		try {
-			FileInputStream f = openFileInput(IMAGE_PNG);
-			bmp = BitmapFactory.decodeStream(f);
-            //Log.i("Yan", "Initial Size: " + bmp.getRowBytes() * bmp.getHeight());
+		String imageUri = intent.getStringExtra("com.yzdevelopment.inTouch.beam_imageUri");
+		String json = intent.getStringExtra("com.yzdevelopment.inTouch.beam_contact");
 
-            ByteArrayOutputStream stream = new ByteArrayOutputStream();
-            bmp.compress(Bitmap.CompressFormat.PNG,100,stream);
-            byte[] byteArray = stream.toByteArray();
+		// TODO Remove after test
+//		imageUri = null;
 
-            //Log.i("Yan", "Sending Size: " + bmp.getRowBytes() * bmp.getHeight());
+		if (imageUri != null && !imageUri.isEmpty()) {
+			try {
 
-            // create an NDEF message with two records of plain text type
-            mNdefMessage = new NdefMessage(
-                    new NdefRecord[] {
-                            createNewTextRecord(message, Locale.ENGLISH, true),
-                            NdefRecord.createMime("image/png", byteArray)
-                    }
-            );
-        } catch (FileNotFoundException e) {
-            mNdefMessage = new NdefMessage(
-                    new NdefRecord[] {
-                            createNewTextRecord(message, Locale.ENGLISH, true)
-                    }
-            );
+//                BitmapFactory.Options o = new BitmapFactory.Options();
+//                o.inJustDecodeBounds = true;
+//                Bitmap bmp = BitmapFactory.decodeStream(getContentResolver().openInputStream(Uri.parse(imageUri)), null, o);
+                Bitmap bmp = BitmapFactory.decodeStream(getContentResolver().openInputStream(Uri.parse(imageUri)));
+
+                Log.i("nfc", "Initial Size: " + bmp.getRowBytes() * bmp.getHeight());
+
+//                BitmapFactory.Options o2 = new BitmapFactory.Options();
+//                o2.inSampleSize = 1;
+//                bmp = BitmapFactory.decodeStream(getContentResolver().openInputStream(Uri.parse(imageUri)), null, o2);
+
+                Log.i("nfc", "After Size: " + bmp.getRowBytes() * bmp.getHeight());
+
+//				Bitmap bmp = BitmapFactory.decodeStream(getContentResolver().openInputStream(Uri.parse(imageUri)));
+//
+//                Log.i("nfc", "Initial Size: " + bmp.getRowBytes() * bmp.getHeight());
+//
+				ByteArrayOutputStream stream = new ByteArrayOutputStream();
+				bmp.compress(Bitmap.CompressFormat.PNG,0,stream);
+//
+//                // TODO
+//                Bitmap decoded = BitmapFactory.decodeStream(new ByteArrayInputStream(stream.toByteArray()));
+//
+//                Log.i("nfc", "Sending Size: " + decoded.getRowBytes() * decoded.getHeight());
+
+				byte[] byteArray = stream.toByteArray();
+
+				mNdefMessage = new NdefMessage(
+					new NdefRecord[] {
+						createNewRecord(json, Locale.ENGLISH, true),
+						new NdefRecord(NdefRecord.TNF_MIME_MEDIA, "image/png".getBytes(), null, byteArray)
+					}
+				);
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+                imageUri = null;
+			}
+		}
+
+		if (imageUri == null && mNdefMessage == null) {
+			mNdefMessage = new NdefMessage(
+				new NdefRecord[] {
+						createNewRecord(json, Locale.ENGLISH, true)
+				}
+			);
 		}
 	}
 	
-	public static NdefRecord createNewTextRecord(String text, Locale locale, boolean encodeInUtf8) {
+	public static NdefRecord createNewRecord(String text, Locale locale, boolean encodeInUtf8) {
 		byte[] langBytes = locale.getLanguage().getBytes(Charset.forName("US-ASCII"));
 
 		Charset utfEncoding = encodeInUtf8 ? Charset.forName("UTF-8") : Charset.forName("UTF-16");

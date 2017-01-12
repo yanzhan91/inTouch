@@ -1,141 +1,159 @@
 package com.yzdevelopment.inTouch;
 
-//import java.io.ByteArrayInputStream;
-//import java.io.ByteArrayOutputStream;
-//import java.util.ArrayList;
-//import java.util.Arrays;
-//import java.util.List;
-//
-//import android.app.AlertDialog;
-//import android.app.PendingIntent;
-//import android.content.ContentProviderOperation;
-//import android.content.Context;
-//import android.content.DialogInterface;
-//import android.content.Intent;
-//import android.content.IntentFilter;
-//import android.content.ContentUris;
-//import android.database.Cursor;
-//import android.graphics.Bitmap;
-//import android.graphics.BitmapFactory;
-//import android.net.Uri;
-//import android.nfc.NdefMessage;
-//import android.nfc.NdefRecord;
-//import android.nfc.NfcAdapter;
-//import android.nfc.Tag;
-//import android.nfc.tech.NfcF;
-//import android.os.Bundle;
-//import android.os.Parcelable;
-//import android.provider.ContactsContract;
-//import android.provider.ContactsContract.Data;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import android.app.AlertDialog;
+import android.app.PendingIntent;
+import android.content.ContentProviderOperation;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.ContentUris;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
+import android.nfc.NdefMessage;
+import android.nfc.NdefRecord;
+import android.nfc.NfcAdapter;
+import android.nfc.Tag;
+import android.nfc.tech.Ndef;
+import android.nfc.tech.NfcA;
+import android.nfc.tech.NfcF;
+import android.os.Bundle;
+import android.os.Parcelable;
+import android.provider.ContactsContract;
+import android.provider.ContactsContract.Data;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
-//import android.util.Log;
-//import android.view.Gravity;
-//import android.view.LayoutInflater;
-//import android.widget.ImageView;
-//import android.widget.LinearLayout;
-//import android.widget.ScrollView;
-//import android.widget.TableLayout;
-//import android.widget.TableRow;
-//import android.widget.TextView;
-//
+import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
+import android.widget.TableLayout;
+import android.widget.TableRow;
+import android.widget.TextView;
+
 public class TagDispatch extends ActionBarActivity {
-//
-//	private NfcAdapter mNfcAdapter;
-//	private PendingIntent mPendingIntent;
-//	private IntentFilter[] mIntentFilters;
-//	private String[][] mNFCTechLists;
-//
-//	@Override
-//	public void onCreate(Bundle savedState) {
-//
-//		super.onCreate(savedState);
-//
-//		setContentView(R.layout.transfer);
-//        getSupportActionBar().setDisplayShowTitleEnabled(false);
-//
-//		mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
-//
-//        TextView mTextView = (TextView)findViewById(R.id.tv);
-//
-//		mTextView.setText("Receiving...");
-//
-//		// create an intent with tag data and deliver to this activity
-//		mPendingIntent = PendingIntent.getActivity(this, 0,
-//				new Intent(this, getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
-//
-//		// set an intent filter for all MIME data
-//		IntentFilter ndefIntent = new IntentFilter(NfcAdapter.ACTION_NDEF_DISCOVERED);
-//		try {
-//			ndefIntent.addDataType("*/*");
-//			mIntentFilters = new IntentFilter[] { ndefIntent };
-//		} catch (Exception e) {
-//			Log.e("TagDispatch", e.toString());
-//		}
-//
-//		mNFCTechLists = new String[][] { new String[] { NfcF.class.getName() } };
-//	}
-//
-//	@Override
-//	public void onNewIntent(Intent intent) {
-//		String action = intent.getAction();
-//		Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
-//
-//		String s = action + "\n\n" + tag.toString();
-//
-//		// parse through all NDEF messages and their records and pick text type only
-//		Parcelable[] data = intent.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES);
-//
-//		byte[] imagePayload = null;
-//
-//		if (data != null) {
-//			try {
-//				for (int i = 0; i < data.length; i++) {
-//					NdefRecord [] recs = ((NdefMessage)data[i]).getRecords();
-//					for (int j = 0; j < recs.length; j++) {
-//						if (recs[j].getTnf() == NdefRecord.TNF_WELL_KNOWN &&
-//								Arrays.equals(recs[j].getType(), NdefRecord.RTD_TEXT)) {
-//
-//							byte[] payload = recs[j].getPayload();
-//							String textEncoding = ((payload[0] & 0x80) == 0) ? "UTF-8" : "UTF-16";
-//							int langCodeLen = payload[0] & 0x3F;
-//
-//							s += ("\n\nNdefMessage[" + i + "], NdefRecord[" + j + "]:\n\"" +
-//									new String(payload, langCodeLen + 1,
-//											payload.length - langCodeLen - 1, textEncoding) +
-//											"\"");
-//						} else if (recs[j].getTnf() == NdefRecord.TNF_MIME_MEDIA) {
-//							imagePayload = recs[j].getPayload();
-//						}
-//					}
-//				}
-//				if (imagePayload != null) {
-//					addContact(s, BitmapFactory.decodeByteArray(imagePayload , 0, imagePayload.length));
-//				} else {
-//					addContact(s, BitmapFactory.decodeResource(getResources(),R.drawable.default_contact_image));
-//				}
-//			} catch (Exception e) {
-//				Log.e("TagDispatch", e.toString());
-//			}
-//
-//		}
-//	}
-//
-//	@Override
-//	public void onResume() {
-//		super.onResume();
-//
-//		//Log.i("Yan", "Resuming...");
-//		mNfcAdapter.enableForegroundDispatch(this, mPendingIntent, mIntentFilters, mNFCTechLists);
-//	}
-//
-//	@Override
-//	public void onPause() {
-//		super.onPause();
-//
-//		//Log.i("Yan", "Pausing...");
-//		mNfcAdapter.disableForegroundDispatch(this);
-//	}
-//
+
+	private NfcAdapter mNfcAdapter;
+	private PendingIntent mPendingIntent;
+	private IntentFilter[] mIntentFilters;
+	private String[][] mNFCTechLists;
+
+    public static final String MIME_TEXT_PLAIN = "text/plain";
+    public static final String MIME_IMAGE_PNG = "image/png";
+
+	@Override
+	public void onCreate(Bundle savedState) {
+
+		super.onCreate(savedState);
+
+		setContentView(R.layout.transfer);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.show();
+        actionBar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.brandPrimaryColor)));
+        actionBar.setDisplayShowTitleEnabled(false);
+
+		mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
+
+        TextView mTextView = (TextView)findViewById(R.id.tv);
+		mTextView.setText("Ready to receive");
+
+		// create an intent with tag data and deliver to this activity
+		mPendingIntent = PendingIntent.getActivity(this, 0,
+				new Intent(this, getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
+
+		// set an intent filter for all MIME data
+		IntentFilter ndefIntent = new IntentFilter(NfcAdapter.ACTION_NDEF_DISCOVERED);
+		try {
+			ndefIntent.addDataType("*/*");
+			mIntentFilters = new IntentFilter[] { ndefIntent };
+		} catch (Exception e) {
+			Log.e("TagDispatch", e.toString());
+		}
+
+		mNFCTechLists = new String[][] { new String[] { NfcF.class.getName() } };
+	}
+
+	@Override
+	public void onNewIntent(Intent intent) {
+        String action = intent.getAction();
+        Log.i("nfc", "action = " + action);
+
+        if (NfcAdapter.ACTION_NDEF_DISCOVERED.equals(action)) {
+            String type = intent.getType();
+            Log.i("nfc", "type = " + type);
+            if (MIME_TEXT_PLAIN.equals(type)) {
+                Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
+                Ndef ndef = Ndef.get(tag);
+                if (ndef == null) {
+                    return;
+                }
+                NdefMessage ndefMessage = ndef.getCachedNdefMessage();
+                NdefRecord[] records = ndefMessage.getRecords();
+                Log.i("nfc", "records size = " + records.length);
+                for (NdefRecord ndefRecord : records) {
+                    Log.i("nfc", "record = " + ndefRecord.toString());
+                    if (ndefRecord.getTnf() == NdefRecord.TNF_WELL_KNOWN &&
+                            Arrays.equals(ndefRecord.getType(), NdefRecord.RTD_TEXT)) {
+                        byte[] payload = ndefRecord.getPayload();
+                        String textEncoding = ((payload[0] & 128) == 0) ? "UTF-8" : "UTF-16";
+                        int languageCodeLength = payload[0] & 0063;
+                        try {
+                            String result = new String(payload, languageCodeLength + 1,
+                                    payload.length - languageCodeLength - 1, textEncoding);
+                            Log.i("nfc", "result = " + result);
+                        } catch (UnsupportedEncodingException e) {
+                            // TODO
+                        }
+                    } else if (ndefRecord.getTnf() == NdefRecord.TNF_MIME_MEDIA) {
+                        byte[] picload = ndefRecord.getPayload();
+                        Bitmap photo = BitmapFactory.decodeByteArray(picload, 0, picload.length);
+
+                        ImageView iv = (ImageView) findViewById(R.id.transferImage);
+                        iv.setImageBitmap(photo);
+                    }
+                }
+            } else if (MIME_IMAGE_PNG.equals(type)) {
+                Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
+                Log.i("nfc", "tag2 = " + tag);
+                Ndef ndef = Ndef.get(tag);
+                if (ndef == null) {
+                    return;
+                }
+                NdefMessage ndefMessage = ndef.getCachedNdefMessage();
+                NdefRecord[] records = ndefMessage.getRecords();
+                Log.i("nfc", "records size2 = " + records.length);
+            }
+        }
+	}
+
+	@Override
+	public void onResume() {
+		super.onResume();
+
+		//Log.i("Yan", "Resuming...");
+		mNfcAdapter.enableForegroundDispatch(this, mPendingIntent, mIntentFilters, mNFCTechLists);
+	}
+
+	@Override
+	public void onPause() {
+		super.onPause();
+
+		//Log.i("Yan", "Pausing...");
+		mNfcAdapter.disableForegroundDispatch(this);
+	}
+
 //    public void addContact(String s, final String imageUri) {
 //        //Log.i("Yan", "Received Size: " + imageUri.getRowBytes() * imageUri.getHeight());
 //        //Log.i("Yan", "Received Message: " + s);

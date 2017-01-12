@@ -12,10 +12,11 @@
     <ImageView
         android:id="@+id/img"
         android:layout_width="300dp"
-        android:layout_height="135dp"
-        android:layout_marginBottom="20dp"
+        android:layout_height="128dp"
+        android:layout_marginBottom="40dp"
         android:layout_gravity="center"
-        android:background="@drawable/home_image_blue"
+        android:layout_marginRight="5dp"
+        android:background="@drawable/intouch_homescreen_image"
         />
 
     <Button
