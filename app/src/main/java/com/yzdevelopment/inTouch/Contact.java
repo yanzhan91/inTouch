@@ -111,14 +111,9 @@ public class Contact {
         if (work_phone != null) {
             return display_name + "\nWork: " + work_phone + "\n";
         }
-
         if (email != null) {
             return display_name + "\nEmail: " + email + "\n";
         }
-
-//        Log.i("Yan","company is " + company);
-//        Log.i("Yan","title is " + jobTitle);
-
         if (company != null && jobTitle != null) {
             return display_name + "\n" + company + ", " + jobTitle;
         } else if (company != null) {
@@ -126,7 +121,6 @@ public class Contact {
         } else if (jobTitle != null) {
             return display_name + "\n" + jobTitle;
         }
-
         return null;
     }
 

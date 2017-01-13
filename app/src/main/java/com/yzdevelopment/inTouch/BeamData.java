@@ -46,36 +46,13 @@ public class BeamData extends ActionBarActivity {
 		String imageUri = intent.getStringExtra("com.yzdevelopment.inTouch.beam_imageUri");
 		String json = intent.getStringExtra("com.yzdevelopment.inTouch.beam_contact");
 
-		// TODO Remove after test
-//		imageUri = null;
-
 		if (imageUri != null && !imageUri.isEmpty()) {
 			try {
 
-//                BitmapFactory.Options o = new BitmapFactory.Options();
-//                o.inJustDecodeBounds = true;
-//                Bitmap bmp = BitmapFactory.decodeStream(getContentResolver().openInputStream(Uri.parse(imageUri)), null, o);
                 Bitmap bmp = BitmapFactory.decodeStream(getContentResolver().openInputStream(Uri.parse(imageUri)));
 
-                Log.i("nfc", "Initial Size: " + bmp.getRowBytes() * bmp.getHeight());
-
-//                BitmapFactory.Options o2 = new BitmapFactory.Options();
-//                o2.inSampleSize = 1;
-//                bmp = BitmapFactory.decodeStream(getContentResolver().openInputStream(Uri.parse(imageUri)), null, o2);
-
-                Log.i("nfc", "After Size: " + bmp.getRowBytes() * bmp.getHeight());
-
-//				Bitmap bmp = BitmapFactory.decodeStream(getContentResolver().openInputStream(Uri.parse(imageUri)));
-//
-//                Log.i("nfc", "Initial Size: " + bmp.getRowBytes() * bmp.getHeight());
-//
 				ByteArrayOutputStream stream = new ByteArrayOutputStream();
 				bmp.compress(Bitmap.CompressFormat.PNG,0,stream);
-//
-//                // TODO
-//                Bitmap decoded = BitmapFactory.decodeStream(new ByteArrayInputStream(stream.toByteArray()));
-//
-//                Log.i("nfc", "Sending Size: " + decoded.getRowBytes() * decoded.getHeight());
 
 				byte[] byteArray = stream.toByteArray();
 
