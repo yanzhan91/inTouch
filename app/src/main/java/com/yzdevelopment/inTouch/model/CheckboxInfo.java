@@ -1,4 +1,4 @@
-package com.yzdevelopment.inTouch;
+package com.yzdevelopment.inTouch.model;
 
 public class CheckboxInfo {
     private String key;

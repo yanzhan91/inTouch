@@ -45,7 +45,7 @@ MERGED from com.android.support:support-v4:21.0.3:16:5
 		ADDED from AndroidManifest.xml:17:9
 	android:theme
 		ADDED from AndroidManifest.xml:18:9
-activity#com.yzdevelopment.inTouch.HomePage
+activity#com.yzdevelopment.inTouch.activities.HomePage
 ADDED from AndroidManifest.xml:20:9
 	android:screenOrientation
 		ADDED from AndroidManifest.xml:21:13
@@ -61,7 +61,7 @@ category#android.intent.category.LAUNCHER
 ADDED from AndroidManifest.xml:24:17
 	android:name
 		ADDED from AndroidManifest.xml:24:27
-activity#com.yzdevelopment.inTouch.ProfileInfo
+activity#com.yzdevelopment.inTouch.activities.ProfileInfo
 ADDED from AndroidManifest.xml:28:9
 	android:screenOrientation
 		ADDED from AndroidManifest.xml:34:13
@@ -81,7 +81,7 @@ ADDED from AndroidManifest.xml:36:13
 		ADDED from AndroidManifest.xml:37:17
 	android:value
 		ADDED from AndroidManifest.xml:38:17
-activity#com.yzdevelopment.inTouch.TagDispatch
+activity#com.yzdevelopment.inTouch.activities.TagDispatch
 ADDED from AndroidManifest.xml:41:9
 	android:screenOrientation
 		ADDED from AndroidManifest.xml:47:13
@@ -95,7 +95,7 @@ ADDED from AndroidManifest.xml:41:9
 		ADDED from AndroidManifest.xml:44:13
 	android:name
 		ADDED from AndroidManifest.xml:42:13
-activity#com.yzdevelopment.inTouch.BeamData
+activity#com.yzdevelopment.inTouch.activities.BeamData
 ADDED from AndroidManifest.xml:54:9
 	android:screenOrientation
 		ADDED from AndroidManifest.xml:60:13

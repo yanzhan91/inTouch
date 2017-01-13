@@ -13,8 +13,8 @@
             android:layout_width="82dp"
             android:layout_height="82dp"
             android:src="@drawable/web_hi_res_512_blue"
-            android:layout_marginLeft="4dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="20dp"
             android:gravity="center_vertical"
             />
 
@@ -22,9 +22,12 @@
             android:id="@+id/contact_added_conf_name"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:textSize="14dp"
+            android:textSize="28dp"
             android:gravity="center_vertical"
-            android:layout_marginLeft="20dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="20dp"
+            android:text="PlaceHolder"
             />
 
     </LinearLayout>
@@ -32,9 +35,11 @@
     <TextView
         android:id="@+id/contact_added_conf_info"
         android:layout_width="match_parent"
-        android:layout_height="125dp"
+        android:layout_height="150dp"
         android:textSize="14dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginLeft="4dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:lineSpacingMultiplier="1.5"
         />
 </LinearLayout>

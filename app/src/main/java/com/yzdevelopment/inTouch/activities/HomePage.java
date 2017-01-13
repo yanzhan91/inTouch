@@ -1,10 +1,4 @@
-package com.yzdevelopment.inTouch;
-
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStreamReader;
+package com.yzdevelopment.inTouch.activities;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -14,8 +8,6 @@ import android.graphics.Color;
 import android.nfc.NfcAdapter;
 import android.os.Bundle;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.Button;
 import android.widget.TextView;
 import android.provider.Settings;
 import android.os.Build;
@@ -23,8 +15,10 @@ import android.os.Build;
 import android.app.PendingIntent;
 
 import com.google.gson.Gson;
-
-import org.json.JSONObject;
+import com.yzdevelopment.inTouch.model.Contact;
+import com.yzdevelopment.inTouch.ProfileAccessObject;
+import com.yzdevelopment.inTouch.R;
+import com.yzdevelopment.inTouch.SimpleEula;
 
 public class HomePage extends Activity {
 

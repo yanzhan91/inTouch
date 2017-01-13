@@ -18,13 +18,14 @@
         />
 
     <TextView
+        android:id="@+id/transferDirections"
         android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:textAlignment="center"
         android:layout_marginTop="30dp"
         android:textSize="18sp"
-        android:text="@string/beam_directions"
+        android:text="Placeholder"
         />
 
     <ImageView

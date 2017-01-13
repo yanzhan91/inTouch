@@ -6,6 +6,8 @@ import android.net.Uri;
 import android.provider.ContactsContract;
 import android.util.Log;
 
+import com.yzdevelopment.inTouch.model.Contact;
+
 public class ProfileAccessObject {
 
     private static ProfileAccessObject instance = null;

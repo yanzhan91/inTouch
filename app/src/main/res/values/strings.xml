@@ -17,11 +17,16 @@
 
 	<color name="brandPrimaryColor">#0066FF</color>
 
-    <string name="beam_directions">
+    <string name="receive_directions">
+        1. Hold devices against each \u00A0\u00A0\u00A0\u00A0other
+        \n\n2. Wait for notification
+    </string>
+
+	<string name="beam_directions">
         1. Hold devices against each \u00A0\u00A0\u00A0\u00A0other
         \n\n2. When prompted, tap \u00A0\u00A0\u00A0\u00A0screen
-        \n\n3. Wait for notification \u00A0\u00A0\u00A0\u00A0before departing phone
     </string>
+
     <string name="eula">
         Copyright &#169; 2017 %3$s. All Rights Reserved.
 

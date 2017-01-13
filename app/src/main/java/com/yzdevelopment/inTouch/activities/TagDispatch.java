@@ -1,6 +1,5 @@
-package com.yzdevelopment.inTouch;
+package com.yzdevelopment.inTouch.activities;
 
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.UnsupportedEncodingException;
@@ -19,17 +18,17 @@ import android.content.ContentUris;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.nfc.NdefMessage;
 import android.nfc.NdefRecord;
 import android.nfc.NfcAdapter;
 import android.nfc.Tag;
 import android.nfc.tech.Ndef;
-import android.nfc.tech.NfcA;
 import android.nfc.tech.NfcF;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.provider.ContactsContract;
 import android.provider.ContactsContract.Data;
 import android.support.v7.app.ActionBar;
@@ -45,6 +44,8 @@ import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
+import com.yzdevelopment.inTouch.model.Contact;
+import com.yzdevelopment.inTouch.R;
 
 public class TagDispatch extends ActionBarActivity {
 
@@ -54,7 +55,6 @@ public class TagDispatch extends ActionBarActivity {
 	private String[][] mNFCTechLists;
 
     public static final String MIME_TEXT_PLAIN = "text/plain";
-//    public static final String MIME_IMAGE_PNG = "image/png";
 
 	@Override
 	public void onCreate(Bundle savedState) {
@@ -62,12 +62,12 @@ public class TagDispatch extends ActionBarActivity {
 		super.onCreate(savedState);
 
 		setContentView(R.layout.transfer);
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.show();
-        actionBar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.brandPrimaryColor)));
-        actionBar.setDisplayShowTitleEnabled(false);
+        TextView transferDirectionsText = (TextView) findViewById(R.id.transferDirections);
+        transferDirectionsText.setText(R.string.receive_directions);
+        setUpActionBar();
 
 		mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
+        mNfcAdapter.setNdefPushMessage(null, this, this); // disables beam
 
         TextView mTextView = (TextView)findViewById(R.id.tv);
 		mTextView.setText("Ready to receive");
@@ -87,6 +87,17 @@ public class TagDispatch extends ActionBarActivity {
 
 		mNFCTechLists = new String[][] { new String[] { NfcF.class.getName() } };
 	}
+
+    private void setUpActionBar() {
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.show();
+        actionBar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.brandPrimaryColor)));
+        actionBar.setDisplayShowTitleEnabled(false);
+
+        final Drawable leftArrow = getResources().getDrawable(R.drawable.abc_ic_ab_back_mtrl_am_alpha);
+        leftArrow.setColorFilter(getResources().getColor(R.color.white), PorterDuff.Mode.SRC_ATOP);
+        actionBar.setHomeAsUpIndicator(leftArrow);
+    }
 
 	@Override
 	public void onNewIntent(Intent intent) {
@@ -126,37 +137,14 @@ public class TagDispatch extends ActionBarActivity {
                     } else if (ndefRecord.getTnf() == NdefRecord.TNF_MIME_MEDIA) {
                         byte[] picload = ndefRecord.getPayload();
                         photo = BitmapFactory.decodeByteArray(picload, 0, picload.length);
-
-                        ImageView iv = (ImageView) findViewById(R.id.transferImage);
-                        iv.setImageBitmap(photo);
-                    }
+                                            }
+                }
+                if (photo == null) {
+                    photo = BitmapFactory.decodeResource(getResources(), R.drawable.web_hi_res_512_blue);
                 }
                 addContact(result, photo);
-            } else {
-                Log.i("nfc", "Not suppose to go here");
-//                Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
-//                Log.i("nfc", "tag2 = " + tag);
-//                Ndef ndef = Ndef.get(tag);
-//                if (ndef == null) {
-//                    return;
-//                }
-//                NdefMessage ndefMessage = ndef.getCachedNdefMessage();
-//                NdefRecord[] records = ndefMessage.getRecords();
-//                Log.i("nfc", "records size2 = " + records.length);
             }
         }
-	}
-
-	@Override
-	public void onResume() {
-		super.onResume();
-		mNfcAdapter.enableForegroundDispatch(this, mPendingIntent, mIntentFilters, mNFCTechLists);
-	}
-
-	@Override
-	public void onPause() {
-		super.onPause();
-		mNfcAdapter.disableForegroundDispatch(this);
 	}
 
     public void addContact(String json, final Bitmap imageUri) {
@@ -185,16 +173,25 @@ public class TagDispatch extends ActionBarActivity {
             for (Contact currentContact : similarContacts) {
                 TableRow custom = (TableRow) inflater.inflate(R.layout.existing_similar_contact_alert, null);
                 ImageView iv = (ImageView) custom.findViewById(R.id.similar_contacts_image);
-                try {
-                    iv.setImageBitmap(BitmapFactory.decodeStream(getContentResolver().openInputStream(Uri.parse(currentContact.getImageUri()))));
-                } catch (FileNotFoundException e) {
+
+                if (currentContact.getImageUri() == null) {
                     iv.setImageResource(R.drawable.web_hi_res_512_blue);
+                } else {
+                    try {
+                        iv.setImageBitmap(BitmapFactory.decodeStream(getContentResolver().openInputStream(Uri.parse(currentContact.getImageUri()))));
+                    } catch (FileNotFoundException e) {
+                        iv.setImageResource(R.drawable.web_hi_res_512_blue);
+                    }
                 }
 
                 TextView tv = (TextView) custom.findViewById(R.id.similar_contacts_infomation);
                 tv.setText(currentContact.dispInAlert());
                 // TODO Lots of problems with gravity
                 tv.setGravity(Gravity.CENTER_VERTICAL);
+
+                LinearLayout.LayoutParams llp = new LinearLayout.LayoutParams(ActionBar.LayoutParams.WRAP_CONTENT, ActionBar.LayoutParams.WRAP_CONTENT);
+                llp.setMargins(10, 10, 0, 0); // llp.setMargins(left, top, right, bottom);
+                tv.setLayoutParams(llp);
 
                 table1.addView(custom);
                 TableRow black_line = (TableRow) inflater.inflate(R.layout.black_line,null);
@@ -206,7 +203,7 @@ public class TagDispatch extends ActionBarActivity {
                     .setPositiveButton("Add Anyway", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            createNewContact(receivedContact,imageUri);
+                            createNewContact(receivedContact, imageUri, true);
                         }
                     })
                     .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -219,11 +216,11 @@ public class TagDispatch extends ActionBarActivity {
                     .show();
 
         } else {
-            createNewContact(receivedContact, imageUri);
+            createNewContact(receivedContact, imageUri, false);
         }
     }
 
-	public void createNewContact(Contact receivedContact, Bitmap image) {
+	public void createNewContact(Contact receivedContact, Bitmap image, boolean hasConflicts) {
 
 		ArrayList<ContentProviderOperation> ops = new ArrayList<>();
 
@@ -394,7 +391,15 @@ public class TagDispatch extends ActionBarActivity {
         TextView confInfo = (TextView) confirmationLayout.findViewById(R.id.contact_added_conf_info);
         confImg.setImageBitmap(image);
         confName.setText(receivedContact.dispInConfirmationName());
-        confInfo.setText(receivedContact.dispInConfirmationInfo());
+
+        if (hasConflicts) {
+            String text = receivedContact.dispInConfirmationInfo() + "Note: Certain devices join similar contacts and can be separated";
+            Log.i("nfc", text);
+            confInfo.setText(text);
+        } else {
+            confInfo.setText(receivedContact.dispInConfirmationInfo());
+        }
+
 
         new AlertDialog.Builder(this)
                 .setTitle("Contact Added Successfully")
@@ -533,8 +538,21 @@ public class TagDispatch extends ActionBarActivity {
         if (cursor != null) {
             if (cursor.moveToFirst()) {
                 contact.setImageUri(cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.Photo.PHOTO_THUMBNAIL_URI)));
+                Log.i("nfc",contact.getImageUri());
             }
             cursor.close();
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mNfcAdapter.enableForegroundDispatch(this, mPendingIntent, mIntentFilters, mNFCTechLists);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        mNfcAdapter.disableForegroundDispatch(this);
     }
 }

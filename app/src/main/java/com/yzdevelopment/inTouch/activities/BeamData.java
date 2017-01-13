@@ -1,6 +1,5 @@
-package com.yzdevelopment.inTouch;
+package com.yzdevelopment.inTouch.activities;
 
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.nio.charset.Charset;
@@ -10,7 +9,9 @@ import android.app.PendingIntent;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.nfc.NdefMessage;
 import android.nfc.NdefRecord;
@@ -18,8 +19,9 @@ import android.nfc.NfcAdapter;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.widget.TextView;
+
+import com.yzdevelopment.inTouch.R;
 
 public class BeamData extends ActionBarActivity {
 
@@ -31,10 +33,10 @@ public class BeamData extends ActionBarActivity {
 		super.onCreate(savedState);
 
 		setContentView(R.layout.transfer);
-		ActionBar actionBar = getSupportActionBar();
-		actionBar.show();
-		actionBar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.brandPrimaryColor)));
-		actionBar.setDisplayShowTitleEnabled(false);
+		TextView transferDirectionsText = (TextView) findViewById(R.id.transferDirections);
+		transferDirectionsText.setText(R.string.beam_directions);
+
+		setUpActionBar();
 
         TextView mTextView = (TextView)findViewById(R.id.tv);
 
@@ -75,6 +77,17 @@ public class BeamData extends ActionBarActivity {
 				}
 			);
 		}
+	}
+
+	private void setUpActionBar() {
+		ActionBar actionBar = getSupportActionBar();
+		actionBar.show();
+		actionBar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.brandPrimaryColor)));
+		actionBar.setDisplayShowTitleEnabled(false);
+
+		final Drawable leftArrow = getResources().getDrawable(R.drawable.abc_ic_ab_back_mtrl_am_alpha);
+		leftArrow.setColorFilter(getResources().getColor(R.color.white), PorterDuff.Mode.SRC_ATOP);
+		actionBar.setHomeAsUpIndicator(leftArrow);
 	}
 	
 	public static NdefRecord createNewRecord(String text, Locale locale, boolean encodeInUtf8) {

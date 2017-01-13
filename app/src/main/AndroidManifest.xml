@@ -17,7 +17,7 @@
         android:label="@string/app_name"
         android:theme="@style/HomeTheme">
         <activity
-            android:name=".HomePage"
+            android:name=".activities.HomePage"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -25,37 +25,37 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ProfileInfo"
+            android:name=".activities.ProfileInfo"
             android:label="Change Info"
             android:noHistory="false"
-            android:parentActivityName=".HomePage"
+            android:parentActivityName=".activities.HomePage"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.yzdevelopment.inTouch.HomePage" />
+                android:value="com.yzdevelopment.inTouch.activities.HomePage" />
         </activity>
         <activity
-            android:name=".TagDispatch"
+            android:name=".activities.TagDispatch"
             android:label="Receive"
             android:noHistory="true"
-            android:parentActivityName=".HomePage"
+            android:parentActivityName=".activities.HomePage"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.yzdevelopment.inTouch.HomePage" />
+                android:value="com.yzdevelopment.inTouch.activities.HomePage" />
         </activity>
         <activity
-            android:name=".BeamData"
+            android:name=".activities.BeamData"
             android:label="Send"
             android:noHistory="true"
-            android:parentActivityName=".HomePage"
+            android:parentActivityName=".activities.HomePage"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.yzdevelopment.inTouch.HomePage" />
+                android:value="com.yzdevelopment.inTouch.activities.HomePage" />
         </activity>
     </application>
 

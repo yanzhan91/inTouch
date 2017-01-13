@@ -1,16 +1,14 @@
-package com.yzdevelopment.inTouch;
+package com.yzdevelopment.inTouch.activities;
 
 import android.app.Activity;
 import android.app.PendingIntent;
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.nfc.NfcAdapter;
 import android.os.Bundle;
-import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
@@ -24,6 +22,12 @@ import android.widget.LinearLayout;
 
 import android.provider.ContactsContract;
 import android.widget.TextView;
+
+import com.yzdevelopment.inTouch.model.CheckboxInfo;
+import com.yzdevelopment.inTouch.Constants;
+import com.yzdevelopment.inTouch.model.Contact;
+import com.yzdevelopment.inTouch.ProfileAccessObject;
+import com.yzdevelopment.inTouch.R;
 
 import java.util.ArrayList;
 import java.util.List;

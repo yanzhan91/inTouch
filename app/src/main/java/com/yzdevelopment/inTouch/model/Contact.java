@@ -1,6 +1,4 @@
-package com.yzdevelopment.inTouch;
-
-import android.graphics.Bitmap;
+package com.yzdevelopment.inTouch.model;
 
 public class Contact {
 
